@@ -1,1 +1,31 @@
-# raw data is extracted from source (OpenData NYC) and stored into Azure blob
+# raw data is extracted from source (OpenData NYC) and stored into a database
+
+import requests
+import boto3
+import json
+
+def fetch_raw_data_from_api(api_url):
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print("Failed to fetch data from API", response.status_code)
+        return None
+    
+def upload_raw_data_to_s3(data, bucket_name, file_name):
+    s3 = boto3.client('s3')
+    s3 = put_object(Body=str(data), Bucket=bucket_name, Key=file_name)
+    print("Data uploaded to S3 successfully!")
+
+if __name__ == "__main__":
+    api_url = "https://data.cityofnewyork.us/resource/6fi9-q3ta.json"
+    bucket_name = "cis9440-hw-raw-data"
+    file_name = "brooklyn_bridge_pedestrian_counts.json"
+
+    data = fetch_raw_data_from_api(api_url)
+
+    if data:
+        upload_raw_data_to_s3(data, bucket_name, file_name)
+
+
+
