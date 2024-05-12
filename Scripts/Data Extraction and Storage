@@ -4,28 +4,40 @@ import requests
 import boto3
 import json
 
-def fetch_raw_data_from_api(api_url):
-    response = requests.get(api_url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print("Failed to fetch data from API", response.status_code)
-        return None
+def fetch_and_store_data():
+    # API endpoint URL
+    api_url = "https://data.cityofnewyork.us/resource/6fi9-q3ta.json"
     
-def upload_raw_data_to_s3(data, bucket_name, file_name):
-    s3 = boto3.client('s3')
-    s3 = put_object(Body=str(data), Bucket=bucket_name, Key=file_name)
-    print("Data uploaded to S3 successfully!")
+    # AWS S3 settings
+    bucket_name = "cis9440-hw-raw-data"
+    file_name = "pedestrian_count_data.json"
+    
+    # Initialize offset and limit due to OpenData NYC API limit
+    offset = 0
+    limit = 1000
+    
+    while True:
+        # Make the API request with offset and limit parameters
+        response = requests.get(api_url, params={"$offset": offset, "$limit": limit})
+
+        # Check if the request was successful
+        if response.ok:
+            # Upload JSON data to S3
+            s3 = boto3.client("s3")
+            s3.put_object(Body=response.content, Bucket=bucket_name, Key=file_name)
+            print(f"Stored {limit} records starting from offset {offset} in AWS S3!")
+            
+            # Increment offset for the next batch until the end
+            offset += limit
+        else:
+            print("Error fetching data from the API")
+            break
+
+        # Check if we've reached the end of the dataset
+        if len(response.json()) < limit:
+            break
 
 if __name__ == "__main__":
-    api_url = "https://data.cityofnewyork.us/resource/6fi9-q3ta.json"
-    bucket_name = "cis9440-hw-raw-data"
-    file_name = "brooklyn_bridge_pedestrian_counts.json"
-
-    data = fetch_raw_data_from_api(api_url)
-
-    if data:
-        upload_raw_data_to_s3(data, bucket_name, file_name)
-
+    fetch_and_store_data()
 
 
