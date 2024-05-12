@@ -23,9 +23,13 @@ def fetch_and_store_data():
         # Check if the request was successful
         if response.ok:
             # Upload JSON data to S3
-            s3 = boto3.client("s3")
-            s3.put_object(Body=response.content, Bucket=bucket_name, Key=file_name)
-            print(f"Stored {limit} records starting from offset {offset} in AWS S3!")
+            try:
+                s3 = boto3.client("s3")
+                s3.put_object(Body=response.text, Bucket=bucket_name, Key=file_name)
+                print(f"Stored {limit} records starting from offset {offset} in AWS S3!")
+            except Exception as e:
+                print(f"Error uploading data to S3: {e}")
+                break
             
             # Increment offset for the next batch until the end
             offset += limit
@@ -39,5 +43,4 @@ def fetch_and_store_data():
 
 if __name__ == "__main__":
     fetch_and_store_data()
-
 
