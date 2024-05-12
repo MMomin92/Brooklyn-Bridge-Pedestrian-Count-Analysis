@@ -106,3 +106,27 @@ def reorganize(data_df):
 transformed_data_df = reorganize(data_df)
 #print(transformed_data_df.head())
 
+
+# Clean up rows with duplicate dates
+def remove_duplicate_dates(data_df):
+    # Count the number of rows before removing duplicates
+    initial_rows = data_df.shape[0]
+    
+    # Drop duplicate rows based on 'date' column
+    data_df.drop_duplicates(subset=['date'], inplace=True)
+    
+    # Count the number of rows after removing duplicates
+    final_rows = data_df.shape[0]
+    
+    # Calculate the number of removed rows
+    removed_rows = initial_rows - final_rows
+    
+    return data_df, removed_rows
+
+transformed_data_df, removed_rows_count = remove_duplicate_dates(transformed_data_df)
+
+#print("Number of rows removed:", removed_rows_count)
+
+#print(transformed_data_df.head())
+
+
