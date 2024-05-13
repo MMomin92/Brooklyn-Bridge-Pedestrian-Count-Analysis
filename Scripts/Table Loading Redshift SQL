@@ -3,7 +3,7 @@ CREATE SCHEMA "BBP";
 
 -- Create Time Dimension Table with Surrogate Key and Time_id as Primary Key
 CREATE TABLE "BBP".dim_time (
-    Time_ID SERIAL PRIMARY KEY,
+    Time_ID INT PRIMARY KEY IDENTITY(1,1),
     Date DATE,
     Year INT,
     Quarter INT,
