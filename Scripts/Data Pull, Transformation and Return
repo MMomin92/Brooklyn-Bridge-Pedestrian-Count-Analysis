@@ -34,8 +34,6 @@ data_df = extract_data_from_s3(bucket_name, file_name)
 
 ### Transformation ###
 def transform_data(data_df):
-    # Handle missing values individually because we want to keep events
-    data_df = handle_missing_values(data_df)
 
     # Convert columns to appropriate data types
     data_df = convert_data_types(data_df)
@@ -52,11 +50,6 @@ def transform_data(data_df):
     # Drop duplicates
     data_df = drop_duplicates(data_df)
 
-    return data_df
-
-
-def handle_missing_values(data_df):
-    data_df.dropna(subset=['hour_beginning', 'pedestrians', 'towards_manhattan', 'towards_brooklyn'], inplace=True) 
     return data_df
 
 
@@ -92,7 +85,18 @@ def drop_duplicates(data_df):
 # Transform the data and columns
 transformed_data_df = transform_data(data_df)
 
+print(len(transformed_data_df))
+
+def handle_missing_values(data_df):
+    data_df.dropna(subset=['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation'], inplace=True) 
+    return data_df
+
+# Handle values that do not show up as NaN
+transformed_data_df.replace('nan', pd.NA, inplace=True)
+
+transformed_data_df = handle_missing_values(transformed_data_df)
 #print(transformed_data_df.head())
+print(len(transformed_data_df))
 
 # Reorganize columns
 def reorganize(data_df):
