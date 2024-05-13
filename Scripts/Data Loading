@@ -1,2 +1,42 @@
 # Data is loaded into the datawarehouse tables
+import psycopg2
+import pandas as pd
+from sqlalchemy import create_engine
+
+# Define the connection parameters
+host = 'redshift-cluster-cis9440-hws.chhiccjmjzfh.us-east-2.redshift.amazonaws.com'
+port = '5439'
+database = 'dev'
+user = 'awsuser'
+password = 'TWxsp3hrkN4eUt4'
+
+# Create a connection string
+connection = f'postgresql://{user}:{password}@{host}:{port}/{database}'
+
+# Create a SQLAlchemy engine
+engine = create_engine(connection)
+
+# Define function to insert data into Redshift tables
+def insert_into_redshift(table_name, data_df):
+    try:
+        # Insert data into the table using Pandas' to_sql function
+        data_df.to_sql(table_name, engine, if_exists='append', index=False)
+        print(f'Data inserted into {table_name} successfully.')
+    except Exception as e:
+        print(f'Error inserting data into {table_name}: {str(e)}')
+
+# Load the transformed data into DataFrames
+data_df = pd.read_csv('transformed_bbp_data.csv')
+
+# Insert data into dim_time table
+insert_into_redshift('dim_time', data_df_dim_time)
+
+# Insert data into dim_weather table
+insert_into_redshift('dim_weather', data_df_dim_weather)
+
+# Insert data into dim_event table
+insert_into_redshift('dim_event', data_df_dim_event)
+
+# Insert data into fact_pedestrian table
+insert_into_redshift('fact_pedestrian', data_df_fact_pedestrian)
 
