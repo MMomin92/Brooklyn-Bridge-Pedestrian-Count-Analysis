@@ -107,6 +107,10 @@ transformed_data_df = reorganize(transformed_data_df)
 
 #print(transformed_data_df.head())
 
+
+
+
+### Storage back into S3
 # Function to save DataFrame as CSV file in S3
 def save_to_s3(dataframe, bucket, key):
     csv_buffer = io.StringIO()
