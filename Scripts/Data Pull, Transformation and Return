@@ -2,6 +2,7 @@
 import boto3
 import pandas as pd
 import json
+import io
 
 ### Extraction from S3 ### 
 # Extract data from S3 bucket and return as a DataFrame
@@ -106,17 +107,19 @@ transformed_data_df = reorganize(transformed_data_df)
 
 #print(transformed_data_df.head())
 
+# Function to save DataFrame as CSV file in S3
+def save_to_s3(dataframe, bucket, key):
+    csv_buffer = io.StringIO()
+    dataframe.to_csv(csv_buffer, index=False)
+    s3_resource = boto3.resource('s3')
+    s3_resource.Object(bucket, key).put(Body=csv_buffer.getvalue())
+
+bucket_name = "cis9440-hw-raw-data"
+
 # Save the transformed data into separate CSV files for each table
-transformed_data_df_dim_time = transformed_data_df[['date', 'year', 'quarter', 'month', 'day', 'hour']]
-transformed_data_df_dim_time.to_csv('dim_time.csv', index=False)
+save_to_s3(transformed_data_df[['date', 'year', 'quarter', 'month', 'day', 'hour']], bucket_name, 'dim_time.csv')
+save_to_s3(transformed_data_df[['weather', 'temperature', 'precipitation']], bucket_name, 'dim_weather.csv')
+save_to_s3(transformed_data_df[['events']], bucket_name, 'dim_event.csv')
+save_to_s3(transformed_data_df[['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'date', 'weather', 'events']], bucket_name, 'fact_pedestrian.csv')
 
-transformed_data_df_dim_weather = transformed_data_df[['weather', 'temperature', 'precipitation']]
-transformed_data_df_dim_weather.to_csv('dim_weather.csv', index=False)
-
-transformed_data_df_dim_event = transformed_data_df[['events']]
-transformed_data_df_dim_event.to_csv('dim_event.csv', index=False)
-
-transformed_data_df_fact_pedestrian = transformed_data_df[['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'date', 'weather', 'events']]
-transformed_data_df_fact_pedestrian.to_csv('fact_pedestrian.csv', index=False)
-
-print('Transformed data saved to different CSV files')
+print('Transformed data saved to different CSV files in S3 bucket:', bucket_name)
