@@ -1,9 +1,10 @@
 -- Create schema
 CREATE SCHEMA "BBP";
 
--- Create Time Dimension Table with Date as Primary Key
+-- Create Time Dimension Table with Surrogate Key and Time_id as Primary Key
 CREATE TABLE "BBP".dim_time (
-    Date DATE PRIMARY KEY,
+    Time_ID SERIAL PRIMARY KEY,
+    Date DATE,
     Year INT,
     Quarter INT,
     Month INT,
@@ -23,7 +24,6 @@ CREATE TABLE "BBP".dim_weather (
 CREATE TABLE "BBP".dim_event (
     Event_ID INT PRIMARY KEY IDENTITY(1,1),
     Event_Name VARCHAR(50), -- Allowing null values
-    -- Add other event attributes if needed
 );
 
 -- Create Fact Table
@@ -31,10 +31,10 @@ CREATE TABLE "BBP".fact_pedestrian (
     Pedestrians INT,
     Towards_Manhattan INT,
     Towards_Brooklyn INT,
-    Date DATE,
+    Time_ID INT,
     Weather_ID INT,
     Event_ID INT,
-    FOREIGN KEY (Date) REFERENCES "BBP".dim_time(Date),
+    FOREIGN KEY (Time_ID) REFERENCES "BBP".dim_time(Time_ID),
     FOREIGN KEY (Weather_ID) REFERENCES "BBP".dim_weather(Weather_ID),
     FOREIGN KEY (Event_ID) REFERENCES "BBP".dim_event(Event_ID)
 );
