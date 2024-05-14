@@ -136,7 +136,16 @@ Summary
 - Classification by weather provides insights into how different conditions affect pedestrian traffic.
 - Visualizations highlight traffic patterns, peak hours, and the impact of special events.
 
-## Graph/Visualization Details
+
+## Visualizations
+### AWS QuickSight Dashboard
+
+The AWS QuickSight dashboard provides a preliminary look into the data, offering additional insights into pedestrian traffic patterns. View the dashboard [here](https://us-east-1.quicksight.aws.amazon.com/sn/dashboards/bff5ca15-a937-4bf6-8879-430d6ff379c6/views/c195c270-ea9f-431c-80dd-f1f600141fcd?directory_alias=muqsit).
+
+### Power BI Visualizations
+
+The Power BI visualizations provide a detailed analysis of pedestrian traffic on the Brooklyn Bridge, utilizing merged datasets for comprehensive insights.
+
 ### Pie Chart: Distribution of Pedestrian Traffic by Weather Conditions
 
 This visualization shows the distribution of pedestrian traffic on the Brooklyn Bridge across different weather conditions. The table below provides the total pedestrian counts for each weather type, which are used to create the pie chart.
