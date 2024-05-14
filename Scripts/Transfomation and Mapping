@@ -1,22 +1,20 @@
 import pandas as pd
-import hashlib
 import boto3
 import io
 import json
 
-### Extraction from S3 ### 
+### Initialization
+s3_client = boto3.client('s3')
+bucket_name = "cis9440-hw-raw-data"
+file_name = "pedestrian_count_data.json"
+
+### Extraction from S3 ###
 def extract_data_from_s3(bucket_name, file_name):
-    s3 = boto3.client("s3")
-    obj = s3.get_object(Bucket=bucket_name, Key=file_name)
+    obj = s3_client.get_object(Bucket=bucket_name, Key=file_name)
     data = obj['Body'].read().decode('utf-8')
     data_json = json.loads(data)
     df = pd.DataFrame(data_json)
     return df
-
-bucket_name = "cis9440-hw-raw-data"
-file_name = "pedestrian_count_data.json"
-
-data_df = extract_data_from_s3(bucket_name, file_name)
 
 ### Transformation ###
 def transform_data(data_df):
@@ -24,17 +22,19 @@ def transform_data(data_df):
     data_df = extract_and_format_dates(data_df)
     data_df = drop_columns(data_df)
     data_df.rename(columns={'weather_summary': 'weather'}, inplace=True)
+    data_df = prepare_for_duplicates(data_df)
     data_df = drop_duplicates(data_df)
     return data_df
 
+# Additional Transformations #
 def convert_data_types(data_df):
-    data_df['pedestrians'] = pd.to_numeric(data_df['pedestrians'], errors='coerce')
-    data_df['towards_manhattan'] = pd.to_numeric(data_df['towards_manhattan'], errors='coerce')
-    data_df['towards_brooklyn'] = pd.to_numeric(data_df['towards_brooklyn'], errors='coerce')
+    columns = ['pedestrians', 'towards_manhattan', 'towards_brooklyn']
+    for col in columns:
+        data_df[col] = pd.to_numeric(data_df[col], errors='coerce')
     return data_df
 
 def extract_and_format_dates(data_df):
-    data_df['hour_beginning'] = pd.to_datetime(data_df['hour_beginning'])
+    data_df['hour_beginning'] = pd.to_datetime(data_df['hour_beginning'], errors='coerce')
     data_df['year'] = data_df['hour_beginning'].dt.year
     data_df['quarter'] = data_df['hour_beginning'].dt.quarter
     data_df['month'] = data_df['hour_beginning'].dt.month
@@ -44,78 +44,83 @@ def extract_and_format_dates(data_df):
     return data_df
 
 def drop_columns(data_df):
-    data_df.drop(columns=['hour_beginning', 'location'], inplace=True)
+    return data_df.drop(columns=['hour_beginning', 'location'])
+
+def prepare_for_duplicates(data_df):
+    # Converting only object columns that might contain complex types to strings
+    object_columns = data_df.select_dtypes(include=['object']).columns
+    for column in object_columns:
+        data_df[column] = data_df[column].astype(str)
     return data_df
 
 def drop_duplicates(data_df):
-    data_df_str = data_df.astype(str)
-    data_df_str.drop_duplicates(inplace=True)
-    data_df = data_df_str.astype(data_df.dtypes.to_dict())
-    return data_df
-
-transformed_data_df = transform_data(data_df)
+    return data_df.drop_duplicates()
 
 def handle_missing_values(data_df):
-    data_df.replace('nan', pd.NA, inplace=True)
-    data_df.dropna(subset=['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation'], inplace=True)
-    return data_df
+    return data_df.dropna(subset=['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation'])
 
-transformed_data_df = handle_missing_values(transformed_data_df)
+def replace_empty_events(data_df):
+    # Replace empty or null 'events' entries with 'No Event'
+    data_df['events'] = data_df['events'].replace({'': 'No Event', None: 'No Event'})
+    return data_df
 
 def reorganize(data_df):
-    new_order = ['date', 'year', 'quarter', 'month', 'day', 'hour', 'pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation', 'events']
-    data_df = data_df[new_order]
-    return data_df
-
-transformed_data_df = reorganize(transformed_data_df)
+    columns_order = ['date', 'year', 'quarter', 'month', 'day', 'hour', 'pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation', 'events']
+    return data_df[columns_order]
 
 ### Mapping by generating IDs ###
 def generate_ids(data_df):
-    data_df['time_id'] = data_df.groupby(['date', 'year', 'quarter', 'month', 'day', 'hour']).ngroup() + 1
-    
-    # Create unique ID mappings for weather dimension
+    # Generate unique IDs for the time dimension, including the hour to ensure uniqueness
+    time_unique = data_df[['date', 'year', 'quarter', 'month', 'day', 'hour']].drop_duplicates().reset_index(drop=True)
+    time_unique['time_id'] = range(1, len(time_unique) + 1)
+    data_df = data_df.merge(time_unique, on=['date', 'year', 'quarter', 'month', 'day', 'hour'], how='left')
+
+    # Generate unique IDs for the weather dimension
     weather_unique = data_df[['weather', 'temperature', 'precipitation']].drop_duplicates().reset_index(drop=True)
     weather_unique['weather_id'] = range(1, len(weather_unique) + 1)
     data_df = data_df.merge(weather_unique, on=['weather', 'temperature', 'precipitation'], how='left')
-    
-    # Create unique ID mappings for event dimension
+
+    # Generate unique IDs for the event dimension
     event_unique = data_df[['events']].drop_duplicates().reset_index(drop=True)
     event_unique['event_id'] = range(1, len(event_unique) + 1)
     data_df = data_df.merge(event_unique, on=['events'], how='left')
-    
+
     return data_df
+
+
+### Split into Dimension and Fact Tables ###
+def split_data(data_df):
+    dim_time = data_df[['date', 'year', 'quarter', 'month', 'day', 'hour', 'time_id']].drop_duplicates()
+    dim_weather = data_df[['weather', 'temperature', 'precipitation', 'weather_id']].drop_duplicates()
+    dim_event = data_df[['events', 'event_id']].drop_duplicates()
+    fact_pedestrian = data_df[['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'time_id', 'weather_id', 'event_id']]
+    return dim_time, dim_weather, dim_event, fact_pedestrian
+
+### Save to S3 ###
+def save_to_s3(df, bucket, key):
+    csv_buffer = io.StringIO()
+    df.to_csv(csv_buffer, index=False)
+    s3_client.put_object(Bucket=bucket, Body=csv_buffer.getvalue(), Key=key)
+
+### Main Execution ###
+data_df = extract_data_from_s3(bucket_name, file_name)
+transformed_data_df = transform_data(data_df)
+
+transformed_data_df.replace('nan', pd.NA, inplace=True)
+transformed_data_df = handle_missing_values(transformed_data_df)
+
+transformed_data_df = replace_empty_events(transformed_data_df)
+
+transformed_data_df = reorganize(transformed_data_df)
 
 transformed_data_df = generate_ids(transformed_data_df)
+dim_time, dim_weather, dim_event, fact_pedestrian = split_data(transformed_data_df)
 
-### Additional Cleaning for Weather ID and Event ID ###
-def clean_weather_event_ids(data_df):
-    # Ensure weather_id and event_id are integers
-    data_df['weather_id'] = pd.to_numeric(data_df['weather_id'], errors='coerce')
-    data_df['event_id'] = pd.to_numeric(data_df['event_id'], errors='coerce')
-    
-    # Remove rows with NaN weather_id or event_id
-    data_df.dropna(subset=['weather_id', 'event_id'], inplace=True)
-    
-    # Convert to integers
-    data_df['weather_id'] = data_df['weather_id'].astype(int)
-    data_df['event_id'] = data_df['event_id'].astype(int)
-    
-    return data_df
+# Saving data to S3
+save_to_s3(dim_time, bucket_name, 'dim_time.csv')
+save_to_s3(dim_weather, bucket_name, 'dim_weather.csv')
+save_to_s3(dim_event, bucket_name, 'dim_event.csv')
+save_to_s3(fact_pedestrian, bucket_name, 'fact_pedestrian.csv')
 
-transformed_data_df = clean_weather_event_ids(transformed_data_df)
+print('Data has been transformed and saved to S3.')
 
-### Storage back into S3 ###
-def save_to_s3(dataframe, bucket, key):
-    csv_buffer = io.StringIO()
-    dataframe.to_csv(csv_buffer, index=False)
-    s3_resource = boto3.resource('s3')
-    s3_resource.Object(bucket, key).put(Body=csv_buffer.getvalue())
-
-bucket_name = "cis9440-hw-raw-data"
-
-save_to_s3(transformed_data_df[['date', 'year', 'quarter', 'month', 'day', 'hour', 'time_id']], bucket_name, 'dim_time.csv')
-save_to_s3(transformed_data_df[['weather', 'temperature', 'precipitation', 'weather_id']], bucket_name, 'dim_weather.csv')
-save_to_s3(transformed_data_df[['events', 'event_id']], bucket_name, 'dim_event.csv')
-save_to_s3(transformed_data_df[['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'time_id', 'weather_id', 'event_id']], bucket_name, 'fact_pedestrian.csv')
-
-print('Transformed data saved to different CSV files in S3 bucket:', bucket_name)
