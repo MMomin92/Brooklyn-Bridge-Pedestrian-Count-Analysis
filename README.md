@@ -144,7 +144,7 @@ The AWS QuickSight dashboard provides a preliminary look into the data, offering
 
 ### Power BI Visualizations
 
-The Power BI visualizations provide a detailed analysis of pedestrian traffic on the Brooklyn Bridge, utilizing merged datasets for comprehensive insights.
+The Power BI visualizations provide a detailed analysis of pedestrian traffic on the Brooklyn Bridge, utilizing merged datasets for comprehensive insights. You can view the interactive Power BI dashboard [here](https://app.powerbi.com/reportEmbed?reportId=6ab40ecb-6905-4f15-8855-61f9357a7f19&autoAuth=true&ctid=6f60f0b3-5f06-4e09-9715-989dba8cc7d8).
 
 ### Pie Chart: Distribution of Pedestrian Traffic by Weather Conditions
 
