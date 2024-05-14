@@ -150,6 +150,8 @@ The Power BI visualizations provide a detailed analysis of pedestrian traffic on
 
 This visualization shows the distribution of pedestrian traffic on the Brooklyn Bridge across different weather conditions. The table below provides the total pedestrian counts for each weather type, which are used to create the pie chart.
 
+![Pedestrians Count by Weather](https://github.com/MMomin92/CIS9440-HW/assets/159973038/4047914a-72c8-4a6e-8e33-bb56bae38276)
+
 #### Summary:
 
 - **Partly-Cloudy Day**: Highest pedestrian traffic with **4,506,807** pedestrians.
@@ -172,6 +174,9 @@ Overall, the data indicates a clear preference for walking on the Brooklyn Bridg
 
 This visualization represents the distribution of pedestrian traffic on the Brooklyn Bridge throughout different hours of the day. The table below, which is used to create the column chart, provides detailed insights into the total number of pedestrians for each hour.
 
+![Number of Pedestrians by Hour](https://github.com/MMomin92/CIS9440-HW/assets/159973038/903f48fd-582e-486f-94e1-0c64c70424a9)
+
+
 #### Summary:
 
 - **Peak Hours**: The highest pedestrian traffic is observed between **11 AM** and **3 PM**, with a peak of **1,153,172** pedestrians at **1 PM**. This indicates that late mornings and early afternoons are the busiest times on the Brooklyn Bridge.
@@ -190,6 +195,8 @@ Overall, this data helps identify peak and off-peak hours for pedestrian traffic
 ### Line Chart: Temperature and Pedestrian Traffic Throughout the Day
 
 This visualization shows the average temperature and average pedestrian traffic on the Brooklyn Bridge at different hours of the day.
+
+![Temperature and Pedestrian Counts](https://github.com/MMomin92/CIS9440-HW/assets/159973038/6bddf349-2dd9-4e1e-ac1e-1faa2fbeb537)
 
 #### Summary:
 
