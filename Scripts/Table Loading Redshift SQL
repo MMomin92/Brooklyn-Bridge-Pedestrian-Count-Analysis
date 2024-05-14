@@ -1,9 +1,9 @@
 -- Create schema
 CREATE SCHEMA "BBP";
 
--- Create Time Dimension Table with Surrogate Key and Time_id as Primary Key
+-- Create Time Dimension Table with Time_ID as Primary Key
 CREATE TABLE "BBP".dim_time (
-    Time_ID INT PRIMARY KEY IDENTITY(1,1),
+    Time_ID INT PRIMARY KEY,
     Date DATE,
     Year INT,
     Quarter INT,
@@ -12,18 +12,18 @@ CREATE TABLE "BBP".dim_time (
     Hour INT
 );
 
--- Create Weather Dimension Table with Surrogate Key
+-- Create Weather Dimension Table with Weather_ID as Primary Key
 CREATE TABLE "BBP".dim_weather (
-    Weather_ID INT PRIMARY KEY IDENTITY(1,1),
+    Weather_ID INT PRIMARY KEY,
     Weather VARCHAR(50),
     Temperature FLOAT,
     Precipitation FLOAT
 );
 
--- Create Event Dimension Table with Surrogate Key
+-- Create Event Dimension Table with Event_ID as Primary Key
 CREATE TABLE "BBP".dim_event (
-    Event_ID INT PRIMARY KEY IDENTITY(1,1),
-    Event_Name VARCHAR(50), -- Allowing null values
+    Event_ID INT PRIMARY KEY,
+    Event_Name VARCHAR(50)
 );
 
 -- Create Fact Table
