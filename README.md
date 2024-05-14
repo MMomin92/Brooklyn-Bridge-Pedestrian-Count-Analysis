@@ -150,7 +150,8 @@ The Power BI visualizations provide a detailed analysis of pedestrian traffic on
 
 This visualization shows the distribution of pedestrian traffic on the Brooklyn Bridge across different weather conditions. The table below provides the total pedestrian counts for each weather type, which are used to create the pie chart.
 
-![Pedestrians Count by Weather](https://github.com/MMomin92/CIS9440-HW/assets/159973038/4047914a-72c8-4a6e-8e33-bb56bae38276)
+![CIS9440 HW Graphs conv 1](https://github.com/MMomin92/CIS9440-HW/assets/159973038/5584efea-adf0-4ab6-9854-7a1aca40b8c1)
+
 
 #### Summary:
 
@@ -174,7 +175,7 @@ Overall, the data indicates a clear preference for walking on the Brooklyn Bridg
 
 This visualization represents the distribution of pedestrian traffic on the Brooklyn Bridge throughout different hours of the day. The table below, which is used to create the column chart, provides detailed insights into the total number of pedestrians for each hour.
 
-![Number of Pedestrians by Hour](https://github.com/MMomin92/CIS9440-HW/assets/159973038/903f48fd-582e-486f-94e1-0c64c70424a9)
+![CIS9440 HW Graphs conv 2](https://github.com/MMomin92/CIS9440-HW/assets/159973038/624e89b7-2ad0-4f33-af6f-7f19bcbda96c)
 
 
 #### Summary:
@@ -196,7 +197,7 @@ Overall, this data helps identify peak and off-peak hours for pedestrian traffic
 
 This visualization shows the average temperature and average pedestrian traffic on the Brooklyn Bridge at different hours of the day.
 
-![Temperature and Pedestrian Counts](https://github.com/MMomin92/CIS9440-HW/assets/159973038/6bddf349-2dd9-4e1e-ac1e-1faa2fbeb537)
+![CIS9440 HW Graphs conv 3](https://github.com/MMomin92/CIS9440-HW/assets/159973038/bac6f0c4-a96c-462d-92bc-7d7820888049)
 
 #### Summary:
 
