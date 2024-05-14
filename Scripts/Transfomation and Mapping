@@ -56,14 +56,14 @@ def drop_duplicates(data_df):
 transformed_data_df = transform_data(data_df)
 
 def handle_missing_values(data_df):
+    data_df.replace('nan', pd.NA, inplace=True)
     data_df.dropna(subset=['pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation'], inplace=True)
     return data_df
 
-transformed_data_df.replace('nan', pd.NA, inplace=True)
 transformed_data_df = handle_missing_values(transformed_data_df)
 
 def reorganize(data_df):
-    new_order = ['date','year', 'quarter', 'month', 'day', 'hour', 'pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation', 'events']
+    new_order = ['date', 'year', 'quarter', 'month', 'day', 'hour', 'pedestrians', 'towards_manhattan', 'towards_brooklyn', 'weather', 'temperature', 'precipitation', 'events']
     data_df = data_df[new_order]
     return data_df
 
@@ -86,6 +86,23 @@ def generate_ids(data_df):
     return data_df
 
 transformed_data_df = generate_ids(transformed_data_df)
+
+### Additional Cleaning for Weather ID and Event ID ###
+def clean_weather_event_ids(data_df):
+    # Ensure weather_id and event_id are integers
+    data_df['weather_id'] = pd.to_numeric(data_df['weather_id'], errors='coerce')
+    data_df['event_id'] = pd.to_numeric(data_df['event_id'], errors='coerce')
+    
+    # Remove rows with NaN weather_id or event_id
+    data_df.dropna(subset=['weather_id', 'event_id'], inplace=True)
+    
+    # Convert to integers
+    data_df['weather_id'] = data_df['weather_id'].astype(int)
+    data_df['event_id'] = data_df['event_id'].astype(int)
+    
+    return data_df
+
+transformed_data_df = clean_weather_event_ids(transformed_data_df)
 
 ### Storage back into S3 ###
 def save_to_s3(dataframe, bucket, key):
