@@ -6,7 +6,7 @@
 This project analyzes pedestrian traffic data on the Brooklyn Bridge to provide insights into pedestrian movement patterns, the impact of weather conditions, and event-driven traffic variations. The analysis is part of a demonstration project by the Department of Transportation (DOT) to test automated technology for counting pedestrians. The primary goal is to create visualizations that help in understanding pedestrian flow, peak traffic times, and how external factors like weather and events affect pedestrian counts. The project leverages Amazon Redshift for data warehousing and AWS QuickSight and Power BI for data visualization.
 
 ## Information Architecture
-![Information Architecture](path/to/CIS9440%20HW%20Information%20Architecture.jpg)
+![Information Architecture](https://github.com/MMomin92/CIS9440-HW/assets/159973038/9bcc7fa1-c710-4217-9ce6-d92bd6b451b0)
 
 ### Description
 1. **Extract**:
@@ -64,7 +64,7 @@ The project aims to conduct an in-depth analysis of pedestrian traffic on the Br
 **Weaknesses**: Data quality issues may require extensive cleaning and preprocessing.
 
 ## Dimensional Modeling
-![Logical Model](path/to/Logical%20Model%20BBP.jpg)
+![Dimensional Model](https://github.com/MMomin92/CIS9440-HW/assets/159973038/58a2bd97-5443-4587-a8cc-5965f23188fb)
 
 ### Description
 - **dim_weather**:
