@@ -66,13 +66,13 @@ Summary
 | Month             | Month of the pedestrian count             | INT       | NOT NULL    |
 | Day               | Day of the month                          | INT       | NOT NULL    |
 | Hour              | Hour of the pedestrian count              | INT       | NOT NULL    |
-| Pedestrians       | Total pedestrian count                    | INT       |             |
-| Towards Manhattan | Pedestrians moving towards Manhattan      | INT       |             |
-| Towards Brooklyn  | Pedestrians moving towards Brooklyn       | INT       |             |
-| Weather           | Weather conditions during the count       | VARCHAR   |             |
-| Temperature       | Hourly temperature in Fahrenheit          | FLOAT     |             |
-| Precipitation     | Hourly precipitation in inches            | FLOAT     |             |
-| Events            | Special events or holidays                | VARCHAR   |             |
+| Pedestrians       | Total pedestrian count                    | INT       | NOT NULL    |
+| Towards Manhattan | Pedestrians moving towards Manhattan      | INT       | NULLABLE    |
+| Towards Brooklyn  | Pedestrians moving towards Brooklyn       | INT       | NULLABLE    |
+| Weather           | Weather conditions during the count       | VARCHAR   | NOT NULL    |
+| Temperature       | Hourly temperature in Fahrenheit          | FLOAT     | NOT NULL    |
+| Precipitation     | Hourly precipitation in inches            | FLOAT     | NOT NULL    |
+| Events            | Special events or holidays                | VARCHAR   | NULLABLE    |
 
 
 ### Data Size
