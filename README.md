@@ -56,6 +56,25 @@ The project aims to conduct an in-depth analysis of pedestrian traffic on the Br
 - **Weather Data**: Includes weather conditions, temperature, and precipitation.
 - **Event Data**: Includes information on special events (e.g., holidays).
 
+### Data Dictionary
+Summary
+| Column Name       | Description                               | Data Type | Constraints |
+|-------------------|-------------------------------------------|-----------|-------------|
+| Date              | Date of the pedestrian count              | DATE      | NOT NULL    |
+| Year              | Year of the pedestrian count              | INT       | NOT NULL    |
+| Quarter           | Quarter of the year                       | INT       | NOT NULL    |
+| Month             | Month of the pedestrian count             | INT       | NOT NULL    |
+| Day               | Day of the month                          | INT       | NOT NULL    |
+| Hour              | Hour of the pedestrian count              | INT       | NOT NULL    |
+| Pedestrians       | Total pedestrian count                    | INT       |             |
+| Towards Manhattan | Pedestrians moving towards Manhattan      | INT       |             |
+| Towards Brooklyn  | Pedestrians moving towards Brooklyn       | INT       |             |
+| Weather           | Weather conditions during the count       | VARCHAR   |             |
+| Temperature       | Hourly temperature in Fahrenheit          | FLOAT     |             |
+| Precipitation     | Hourly precipitation in inches            | FLOAT     |             |
+| Events            | Special events or holidays                | VARCHAR   |             |
+
+
 ### Data Size
 - The pedestrian count dataset consists of over 16,000 thousand records spanning multiple years.
 
