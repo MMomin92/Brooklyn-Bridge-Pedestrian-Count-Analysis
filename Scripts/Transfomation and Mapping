@@ -3,6 +3,7 @@ import boto3
 import io
 import json
 
+
 ### Initialization
 s3_client = boto3.client('s3')
 bucket_name = "cis9440-hw-raw-data"
@@ -33,14 +34,15 @@ def convert_data_types(data_df):
         data_df[col] = pd.to_numeric(data_df[col], errors='coerce')
     return data_df
 
+### New Date Extraction Function ###
 def extract_and_format_dates(data_df):
-    data_df['hour_beginning'] = pd.to_datetime(data_df['hour_beginning'], errors='coerce')
-    data_df['year'] = data_df['hour_beginning'].dt.year
-    data_df['quarter'] = data_df['hour_beginning'].dt.quarter
-    data_df['month'] = data_df['hour_beginning'].dt.month
-    data_df['day'] = data_df['hour_beginning'].dt.day
-    data_df['hour'] = data_df['hour_beginning'].dt.hour
-    data_df['date'] = data_df['hour_beginning'].dt.strftime('%Y-%m-%d')
+    data_df['date'] = data_df['hour_beginning'].apply(lambda x: x[:10])
+    data_df['hour'] = data_df['hour_beginning'].apply(lambda x: int(x[11:13]))
+    data_df['date_time'] = pd.to_datetime(data_df['date'] + ' ' + data_df['hour'].astype(str), format='%Y-%m-%d %H')
+    data_df['year'] = data_df['date_time'].dt.year
+    data_df['quarter'] = data_df['date_time'].dt.quarter
+    data_df['month'] = data_df['date_time'].dt.month
+    data_df['day'] = data_df['date_time'].dt.day
     return data_df
 
 def drop_columns(data_df):
@@ -113,7 +115,10 @@ transformed_data_df = replace_empty_events(transformed_data_df)
 
 transformed_data_df = reorganize(transformed_data_df)
 
+
 transformed_data_df = generate_ids(transformed_data_df)
+
+
 dim_time, dim_weather, dim_event, fact_pedestrian = split_data(transformed_data_df)
 
 # Saving data to S3
@@ -122,5 +127,5 @@ save_to_s3(dim_weather, bucket_name, 'dim_weather.csv')
 save_to_s3(dim_event, bucket_name, 'dim_event.csv')
 save_to_s3(fact_pedestrian, bucket_name, 'fact_pedestrian.csv')
 
-print('Data has been transformed and saved to S3.')
 
+print('Data has been transformed and saved to S3.')
