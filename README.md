@@ -136,26 +136,81 @@ Summary
 - Classification by weather provides insights into how different conditions affect pedestrian traffic.
 - Visualizations highlight traffic patterns, peak hours, and the impact of special events.
 
-### Graph/Visualization Details
-1. **Pie Chart: Distribution of Pedestrian Traffic by Weather Conditions**
-   - **Data Used**: Total pedestrian counts and weather conditions.
-   - **Purpose**: To show how pedestrian traffic is distributed across different weather conditions.
+## Graph/Visualization Details
+### Pie Chart: Distribution of Pedestrian Traffic by Weather Conditions
 
-2. **Column Chart: Pedestrian Traffic by Hour**
-   - **Data Used**: Hour and pedestrian counts.
-   - **Purpose**: To visualize the flow of pedestrian traffic throughout the day, identifying peak and off-peak hours.
+This visualization shows the distribution of pedestrian traffic on the Brooklyn Bridge across different weather conditions. The table below provides the total pedestrian counts for each weather type, which are used to create the pie chart.
 
-3. **Line Chart: Temperature Variations Throughout the Day**
-   - **Data Used**: Hour and temperature.
-   - **Purpose**: To observe how temperature varies throughout the day and if there's a noticeable pattern or correlation with pedestrian counts.
+#### Summary:
 
-4. **Heat Map: Pedestrian Traffic by Day and Hour**
-   - **Data Used**: Day, hour, and pedestrian counts.
-   - **Purpose**: To visually represent the intensity of pedestrian traffic throughout different times of the day and across the week.
+- **Partly-Cloudy Day**: Highest pedestrian traffic with **4,506,807** pedestrians.
+- **Clear Day**: Significant traffic with **4,335,804** pedestrians.
+- **Cloudy**: Moderate traffic with **1,287,753** pedestrians.
+- **Clear Night**: **385,588** pedestrians, indicating a preference for clear skies at night.
+- **Rain**: **235,672** pedestrians, showing reduced but notable activity.
+- **Adverse Conditions**: Snow, fog, wind, and sleet collectively have lower traffic, indicating that harsh weather conditions significantly deter pedestrian movement.
 
-5. **Filtering Tool by Date or Dimension**
-   - **Setup**: Implement slicers in Power BI and QuickSight for dynamic filtering.
-   - **Purpose**: To allow users to customize the view of the data to see how pedestrian traffic changes under different conditions or on specific dates.
+#### Insights:
+
+- **Favorable Weather**: Pedestrian traffic is highest during clear and partly-cloudy days.
+- **Adverse Weather**: Traffic drops significantly during harsh weather conditions such as snow, fog, wind, and sleet.
+- **Nighttime Activity**: Clear nights see reasonable pedestrian traffic, suggesting continued use of the bridge after sunset.
+
+Overall, the data indicates a clear preference for walking on the Brooklyn Bridge during favorable weather conditions, with significant drops in pedestrian traffic during adverse weather events. This can help city planners manage pedestrian traffic and ensure safety under various conditions.
+
+
+### Column Chart: Pedestrian Traffic by Hour
+
+This visualization represents the distribution of pedestrian traffic on the Brooklyn Bridge throughout different hours of the day. The table below, which is used to create the column chart, provides detailed insights into the total number of pedestrians for each hour.
+
+#### Summary:
+
+- **Peak Hours**: The highest pedestrian traffic is observed between **11 AM** and **3 PM**, with a peak of **1,153,172** pedestrians at **1 PM**. This indicates that late mornings and early afternoons are the busiest times on the Brooklyn Bridge.
+- **Off-Peak Hours**: The lowest pedestrian traffic is recorded during the early morning hours (from **12 AM** to **5 AM**), with the least traffic of **1,868** pedestrians at **4 AM**. This suggests that fewer people use the bridge during these hours, likely due to the early hours.
+- **Evening Traffic**: There is a noticeable increase in pedestrian traffic in the evening, with **713,173** pedestrians at **6 PM** and **951,068** pedestrians at **5 PM**, indicating that evenings are also relatively busy times on the bridge.
+
+#### Insights:
+
+- **Late Morning to Early Afternoon**: The period from **11 AM to 3 PM** experiences the highest pedestrian activity, making it the peak time for pedestrian traffic.
+- **Early Morning**: The hours from **12 AM to 5 AM** have the least pedestrian activity, which is expected as these are off-peak hours.
+- **Evening**: There is significant pedestrian traffic during the evening hours, suggesting that many people use the bridge for commuting or recreational purposes after work hours.
+
+Overall, this data helps identify peak and off-peak hours for pedestrian traffic on the Brooklyn Bridge, which can be useful for city planning and managing pedestrian safety and resources.
+
+
+### Line Chart: Temperature and Pedestrian Traffic Throughout the Day
+
+This visualization shows the average temperature and average pedestrian traffic on the Brooklyn Bridge at different hours of the day.
+
+#### Summary:
+
+- **Early Morning (0 AM - 6 AM)**:
+  - Low temperatures (48.33°F - 51.35°F).
+  - Minimal pedestrian traffic (2.79 - 34.47 pedestrians).
+
+- **Morning Peak (7 AM - 9 AM)**:
+  - Steady temperatures (48.33°F - 51.49°F).
+  - Increasing pedestrian traffic, peaking at 309.77 at 9 AM.
+
+- **Midday to Early Afternoon (10 AM - 3 PM)**:
+  - Rising temperatures (53.30°F - 58.32°F).
+  - Highest pedestrian traffic, peaking at 1,723.72 at 1 PM.
+
+- **Late Afternoon to Evening (4 PM - 7 PM)**:
+  - Stable temperatures (56.64°F - 58.43°F).
+  - High pedestrian traffic, peaking at 1,753.31 at 5 PM.
+
+- **Evening (8 PM - 11 PM)**:
+  - Cooling temperatures (53.25°F - 56.64°F).
+  - Decreasing pedestrian traffic, down to 67.54 by 11 PM.
+
+#### Insights:
+
+- **Peak Activity**: Highest pedestrian traffic from 10 AM to 3 PM, with higher temperatures.
+- **Low Activity**: Early mornings and evenings see less traffic and cooler temperatures.
+
+Overall, the data highlights peak pedestrian activity during midday and early afternoon, correlating with higher temperatures, and reduced activity during early morning and late evening.
+
 
 ## Conclusion
 ### Impact and Recommendations
