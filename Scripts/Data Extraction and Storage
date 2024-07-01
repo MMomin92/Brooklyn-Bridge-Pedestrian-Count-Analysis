@@ -13,7 +13,7 @@ def fetch_and_store_data():
     # Limit set to 50000 to ensure all the data is extracted
     limit = 50000
     
-    # Make the API request with the limit parameter
+    # Made the API request with the limit parameter
     response = requests.get(api_url, params={"$limit": limit})
 
     # Check if the request was successful
